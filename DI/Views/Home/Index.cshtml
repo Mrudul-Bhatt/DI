@@ -1,0 +1,14 @@
+﻿@model IEnumerable<string>
+
+@{
+    ViewBag.Title = "Heading";
+}
+
+<h1>Home</h1>
+
+@{
+    foreach (var item in Model)
+    {
+        <text>@item</text>
+    }
+}
