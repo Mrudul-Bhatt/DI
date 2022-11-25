@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DI.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using ServiceContracts;
 using Services;
 
@@ -21,12 +24,14 @@ namespace DI.Controllers
         private readonly ICitiesService _citiesService3;
 
         //but not we cannot create object of service here. Because we are using Contracts instead which is interface and interface cannot have objects as it has incomplete methods, so we will use Dependency Injection or Inversion of Control
-        public HomeController(ICitiesService citiesService1, ICitiesService citiesService2, ICitiesService citiesService3, IWebHostEnvironment webHostEnvironment)
+        public HomeController(ICitiesService citiesService1, ICitiesService citiesService2, ICitiesService citiesService3, IWebHostEnvironment webHostEnvironment, IConfiguration configuration, IOptions<WeatherApiOptions> weatherApiOptions)
         {
             _citiesService1 = citiesService1;
             _citiesService2 = citiesService2;
             _citiesService3 = citiesService3;
             _env = webHostEnvironment;
+            _configuration = configuration;
+            _weatherApiOptions = weatherApiOptions.Value;
         }
 
         [Route("/")]
@@ -61,7 +66,6 @@ namespace DI.Controllers
         public IActionResult About()
         {
             //we can access the environment variables from here
-
             if (_env.IsDevelopment())
             {
                 return Ok();
@@ -72,6 +76,24 @@ namespace DI.Controllers
             }
         }
 
+        private readonly IConfiguration _configuration;
+
+        private readonly WeatherApiOptions _weatherApiOptions;
+
+        [Route("/contact")]
+        public IActionResult Contact()
+        {
+            //we can access the configuration variables from here
+
+            ViewBag.configValue = _configuration.GetValue<string>("MyKey");
+            ViewBag.innerVlaue = _configuration["MyKey: innerKey"];
+
+            ViewBag.innerValue1 = _configuration.GetSection("MyKey")["innerValue1"];
+
+            WeatherApiOptions weatherApiOpt = _configuration.GetSection("weatherApi").Get<WeatherApiOptions>();
+
+            return View();
+        }
     }
-}
+
 }
