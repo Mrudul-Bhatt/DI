@@ -1,14 +1,21 @@
 ﻿@model IEnumerable<string>
+@inject ICitiesService citiesServiceInView
 
 @{
     ViewBag.Title = "Heading";
 }
 
-<h1>Home</h1>
+<h1>
+    Singleton
+</h1>
 
-@{
+@*@{
     foreach (var item in Model)
     {
         <text>@item</text>
     }
-}
+}*@
+
+<div>DI-1 @ViewBag.ServiceInstanceId1</div>
+<div>DI-2 @ViewBag.ServiceInstanceId2</div>
+<div>DI-3 @ViewBag.ServiceInstanceId3</div>

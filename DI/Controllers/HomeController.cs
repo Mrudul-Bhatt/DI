@@ -16,19 +16,27 @@ namespace DI.Controllers
         //    _citiesService = new CitiesService();
         //}
 
-        private readonly ICitiesService _citiesService;
+        private readonly ICitiesService _citiesService1;
+        private readonly ICitiesService _citiesService2;
+        private readonly ICitiesService _citiesService3;
 
         //but not we cannot create object of service here. Because we are using Contracts instead which is interface and interface cannot have objects as it has incomplete methods, so we will use Dependency Injection or Inversion of Control
-        public HomeController(ICitiesService citiesService)
+        public HomeController(ICitiesService citiesService1, ICitiesService citiesService2, ICitiesService citiesService3)
         {
-            _citiesService = citiesService;
+            _citiesService1 = citiesService1;
+            _citiesService2 = citiesService2;
+            _citiesService3 = citiesService3;
         }
 
         [Route("/")]
         public IActionResult Index()
         {
             //get cities from service
-            var cities = _citiesService.GetCities();
+            var cities = _citiesService1.GetCities();
+
+            ViewBag.ServiceInstanceId1 = _citiesService1.ServiceInstanceId;
+            ViewBag.ServiceInstanceId2 = _citiesService2.ServiceInstanceId;
+            ViewBag.ServiceInstanceId3 = _citiesService3.ServiceInstanceId;
 
             //pass cities to view to become Strongly Typed View
             return View(cities);
