@@ -21,11 +21,12 @@ namespace DI.Controllers
         private readonly ICitiesService _citiesService3;
 
         //but not we cannot create object of service here. Because we are using Contracts instead which is interface and interface cannot have objects as it has incomplete methods, so we will use Dependency Injection or Inversion of Control
-        public HomeController(ICitiesService citiesService1, ICitiesService citiesService2, ICitiesService citiesService3)
+        public HomeController(ICitiesService citiesService1, ICitiesService citiesService2, ICitiesService citiesService3, IWebHostEnvironment webHostEnvironment)
         {
             _citiesService1 = citiesService1;
             _citiesService2 = citiesService2;
             _citiesService3 = citiesService3;
+            _env = webHostEnvironment;
         }
 
         [Route("/")]
@@ -53,6 +54,24 @@ namespace DI.Controllers
         //    return View(cities);
         //}
 
+        //accessing the environment property if not in Program.cs file
+        private readonly IWebHostEnvironment _env;
+
+        [Route("/about")]
+        public IActionResult About()
+        {
+            //we can access the environment variables from here
+
+            if (_env.IsDevelopment())
+            {
+                return Ok();
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
 
     }
+}
 }

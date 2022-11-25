@@ -13,6 +13,12 @@ builder.Services.AddTransient<ICitiesService, CitiesService>();
 
 var app = builder.Build();
 
+//if app is in development then show the exception and stack trace on browser, else show the friendly error page
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+
 app.UseStaticFiles();
 app.MapControllers();
 
